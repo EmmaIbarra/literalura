@@ -12,17 +12,16 @@ public class Libro {
     private Long Id;
     @Column(unique = true)
     private String titulo;
-    private List<String> genero;
-    private String idioma;
+    private List<String> idioma;
     private Integer numeroDeDescargas;
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Autor> autores;
+    @ManyToOne
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
 
-    private Libro(){}
+    public Libro(){}
 
     public Libro(DatosLibro datosLibro) {
         this.titulo = datosLibro.titulo();
-        this.genero = datosLibro.genero();
         this.idioma = datosLibro.idioma();
         this.numeroDeDescargas = datosLibro.numeroDeDescargas();
     }
@@ -43,19 +42,11 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public List<String> getGenero() {
-        return genero;
-    }
-
-    public void setGenero(List<String> genero) {
-        this.genero = genero;
-    }
-
-    public String getIdioma() {
+    public List<String> getIdioma() {
         return idioma;
     }
 
-    public void setIdioma(String idioma) {
+    public void setIdioma(List<String> idioma) {
         this.idioma = idioma;
     }
 
@@ -67,23 +58,24 @@ public class Libro {
         this.numeroDeDescargas = numeroDeDescargas;
     }
 
-    public List<Autor> getAutores() {
-        return autores;
+    public Autor getAutor() {
+        return autor;
     }
 
-    public void setAutores(List<Autor> autores) {
-        autores.forEach(a -> a.setLibro(this));
-        this.autores = autores;
+    public void setAutor(Autor autor) {
+        if (autor != null) {
+            autor.getLibros().add(this);
+        }
+        this.autor = autor;
     }
 
-    @Override
-    public String toString() {
-        return "****Libro****" +
-                "Titulo: " + titulo + '\'' +
-                "Autor(es): " + autores + '\'' +
-                "Género: " + genero + '\'' +
-                "Idioma: " + idioma + '\'' +
-                "Número de descargas: " + numeroDeDescargas + '\'' +
-                "************" + '\'';
-    }
+//    @Override
+//    public String toString() {
+//        return "****Libro****\n" +
+//                "Titulo: " + titulo + '\n' +
+//                "Autor: " + autores + '\n' +
+//                "Idioma: " + idioma + '\n' +
+//                "Número de descargas: " + numeroDeDescargas + '\n' +
+//                "*************" + '\n';
+//    }
 }
