@@ -3,6 +3,7 @@ package com.aluracursos.literalura.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,11 +12,12 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @Column(nullable = false)
     private String nombre;
     private Integer anoDeNacimiento;
     private Integer anoDeMuerte;
-    @OneToMany(mappedBy = "autor")
-    private List<Libro> libros;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Libro> libros = new ArrayList<>();
 
     public Autor(){}
 
@@ -68,12 +70,16 @@ public class Autor {
         }
     }
 
-//    @Override
-//    public String toString() {
-//        return "****Autor****\n" +
-//                "Nombre: " + nombre + '\n' +
-//                "Año de nacimiento: " + anoDeNacimiento + '\n' +
-//                "Año de muerte: " + anoDeMuerte + '\n' +
-//                "************\n";
-//    }
+    @Override
+    public String toString() {
+        return nombre;
+    }
+
+    public String getDatosAutorCompletos(){
+        return "****Autor****\n" +
+                "Nombre: " + nombre + '\n' +
+                "Año de nacimiento: " + anoDeNacimiento + '\n' +
+                "Año de muerte: " + anoDeMuerte + '\n' +
+                "************\n";
+    }
 }
