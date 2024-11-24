@@ -18,7 +18,8 @@ public class Libro {
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
-    public Libro(){}
+    public Libro() {
+    }
 
     public Libro(DatosLibro datosLibro) {
         this.titulo = datosLibro.titulo();
@@ -69,13 +70,13 @@ public class Libro {
         this.autor = autor;
     }
 
-//    @Override
-//    public String toString() {
-//        return "****Libro****\n" +
-//                "Titulo: " + titulo + '\n' +
-//                "Autor: " + autores + '\n' +
-//                "Idioma: " + idioma + '\n' +
-//                "Número de descargas: " + numeroDeDescargas + '\n' +
-//                "*************" + '\n';
-//    }
+    @Override
+    public String toString() {
+        return "****Libro****\n" +
+                "Titulo: " + titulo + '\n' +
+                "Autor: " + autor + '\n' +
+                "Idioma: " + idioma.get(0) + '\n' +
+                "Número de descargas: " + numeroDeDescargas + '\n' +
+                "*************" + '\n';
+    }
 }
