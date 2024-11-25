@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collector;
 @Component
 public class Principal {
@@ -37,23 +34,38 @@ public class Principal {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
+                    Elija una opción:
                     1 - Buscar libros
+                    2 - Lista de libros guardados
+                    3 - Lista de autores guardados
 
                     0 - Salir
                     """;
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            try {
+                opcion = teclado.nextInt();
+                teclado.nextLine();
 
-            switch (opcion) {
-                case 1:
-                    buscarLibro();
-                    break;
-                case 0:
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("Elija una opción válida");
+                switch (opcion) {
+                    case 1:
+                        buscarLibro();
+                        break;
+                    case 2:
+                        listaDeLibros();
+                        break;
+                    case 3:
+                        listaDeAutores();
+                        break;
+                    case 0:
+                        System.out.println("Cerrando la aplicación...");
+                        break;
+                    default:
+                        System.out.println("Elija una opción válida\n");
+                        break;
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("Entrada no válida, por favor ingrese un número\n");
+                teclado.nextLine();
             }
         }
     }
@@ -131,7 +143,21 @@ public class Principal {
         }
     }
 
+    private void listaDeLibros() {
+        libros = libroRepositorio.findAll();
 
+        libros.stream()
+                .sorted(Comparator.comparing(Libro::getTitulo))
+                .forEach(System.out::println);
+    }
+
+    private void listaDeAutores() {
+        autores = autorRepositorio.findAll();
+
+        autores.stream()
+                .sorted(Comparator.comparing(Autor::getNombre))
+                .forEach(autor -> System.out.println(autor.getDatosAutorCompletos()));
+    }
 
 
 
