@@ -78,8 +78,8 @@ public class Autor {
     public String getDatosAutorCompletos(){
         return "****Autor****\n" +
                 "Nombre: " + nombre + '\n' +
-                "Año de nacimiento: " + anoDeNacimiento + '\n' +
-                "Año de muerte: " + anoDeMuerte + '\n' +
+                "Año de nacimiento: " + (anoDeNacimiento == null ? "Fecha desconocida" : anoDeNacimiento) + '\n' +
+                "Año de muerte: " + (anoDeMuerte == null ? "Fecha desconocida" : anoDeMuerte) + '\n' +
                 "************\n";
     }
 }
