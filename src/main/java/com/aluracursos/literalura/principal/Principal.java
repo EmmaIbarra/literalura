@@ -17,8 +17,6 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private static final String URL_BASE = "https://gutendex.com/books/";
     private ConvierteDatos conversor = new ConvierteDatos();
-    private List<DatosLibro> datosLibros = new ArrayList<>();
-    private List<DatosAutor> datosAutores = new ArrayList<>();
     private final LibroRepository libroRepositorio;
     private final AutorRepository autorRepositorio;
     private List<Libro> libros;
@@ -38,6 +36,7 @@ public class Principal {
                     1 - Buscar libros
                     2 - Lista de libros guardados
                     3 - Lista de autores guardados
+                    4 - Lista de autores por año
 
                     0 - Salir
                     """;
@@ -56,6 +55,9 @@ public class Principal {
                     case 3:
                         listaDeAutores();
                         break;
+                    case 4:
+                        listaDeAutoresPorAno();
+                        break;
                     case 0:
                         System.out.println("Cerrando la aplicación...");
                         break;
@@ -69,6 +71,8 @@ public class Principal {
             }
         }
     }
+
+
 
 
     private void buscarLibro() {
@@ -109,7 +113,7 @@ public class Principal {
 
     private void asignarAutorAlLibro(Libro libro, DatosLibro datosLibro ) {
         if (datosLibro.autores() == null || datosLibro.autores().isEmpty()){
-            System.out.println("Autor no asociado");
+            System.out.println("Autor no asociado\n");
             return;
         }
         DatosAutor datosAutor = datosLibro.autores().get(0);
@@ -159,6 +163,15 @@ public class Principal {
                 .forEach(autor -> System.out.println(autor.getDatosAutorCompletos()));
     }
 
+    private void listaDeAutoresPorAno() {
+        System.out.println("¿Qué año desea consultar?");
+        var autorVivo = teclado.nextInt();
+        teclado.nextLine();
+        List<Autor> filtroAutores = autorRepositorio.listaDeAutoresPorAno(autorVivo);
+        System.out.println("*******Autores vivos en el año: " + autorVivo + "*******\n");
+        filtroAutores.forEach(autor ->
+                System.out.println(autor.getDatosAutorCompletos()));
 
+    }
 
 }
