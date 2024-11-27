@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -171,13 +172,23 @@ public class Principal {
 
     private void listaDeAutoresPorAno() {
         System.out.println("¿Qué año desea consultar?");
-        var autorVivo = teclado.nextInt();
-        teclado.nextLine();
-        List<Autor> filtroAutores = autorRepositorio.listaDeAutoresPorAno(autorVivo);
-        System.out.println("*******Autores vivos en el año: " + autorVivo + "*******\n");
-        filtroAutores.forEach(autor ->
-                System.out.println(autor.getDatosAutorCompletos()));
 
+        int autorVivo = teclado.nextInt();
+        teclado.nextLine();
+
+        if ((autorVivo < 1) || (autorVivo > LocalDate.now().getYear())){
+            System.out.println("Por favor, introduzca un año válido");
+            return;
+        }
+
+        List<Autor> filtroAutores = autorRepositorio.listaDeAutoresPorAno(autorVivo);
+        System.out.println("*******Autores vivos en el año: " + autorVivo + "*******");
+        if (filtroAutores.isEmpty()){
+            System.out.println("No hay autores que estén guardados o vivos en este año");
+        } else {
+            filtroAutores.forEach(autor ->
+                    System.out.println(autor.getDatosAutorCompletos()));
+        };
     }
 
     private void listaDeLibrosPorIdioma() {
@@ -202,14 +213,6 @@ public class Principal {
         } else {
             librosFiltrados.forEach(System.out::println);
         }
-
-//        List<Libro> librosPorIdioma = libroRepositorio.listaDeLibrosPorIdioma(eleccionIdioma);
-//        if (librosPorIdioma.isEmpty()) {
-//            System.out.println("No se econtraron libros en el idioma seleccionado");
-//            return;
-//        }
-//        System.out.println("********Libros por idioma********");
-//        librosPorIdioma.forEach(System.out::println);
 
     }
 }
