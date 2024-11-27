@@ -88,6 +88,6 @@ public class Autor {
     public String obtenerNombresDeLibros(){
         return libros.stream()
                 .map(Libro::getTitulo)
-                .collect(Collectors.joining("| "));
+                .collect(Collectors.joining(" | "));
     }
 }
