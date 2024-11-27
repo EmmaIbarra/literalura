@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 @Component
 public class Principal {
     private Scanner teclado = new Scanner(System.in);
@@ -37,6 +39,7 @@ public class Principal {
                     2 - Lista de libros guardados
                     3 - Lista de autores guardados
                     4 - Lista de autores por año
+                    5 - Lista de libros por idioma
 
                     0 - Salir
                     """;
@@ -57,6 +60,9 @@ public class Principal {
                         break;
                     case 4:
                         listaDeAutoresPorAno();
+                        break;
+                    case 5:
+                        listaDeLibrosPorIdioma();
                         break;
                     case 0:
                         System.out.println("Cerrando la aplicación...");
@@ -174,4 +180,36 @@ public class Principal {
 
     }
 
+    private void listaDeLibrosPorIdioma() {
+        System.out.println("""
+                Elija entre los siguientes idiomas:
+                es - español
+                en - inglés
+                """);
+        var eleccionIdioma = teclado.nextLine().trim().toLowerCase();
+
+        if (!eleccionIdioma.equals("es") && !eleccionIdioma.equals("en")){
+            System.out.println("Idioma no válido. Intente nuevamente");
+            return;
+        }
+        libros = libroRepositorio.findAll();
+
+        List<Libro> librosFiltrados = libros.stream()
+                .filter(l -> l.getIdioma() != null && l.getIdioma().contains(eleccionIdioma))
+                .collect(Collectors.toList());
+        if (librosFiltrados.isEmpty()){
+            System.out.println("No se encontraron libros en el idioma buscado");
+        } else {
+            librosFiltrados.forEach(System.out::println);
+        }
+
+//        List<Libro> librosPorIdioma = libroRepositorio.listaDeLibrosPorIdioma(eleccionIdioma);
+//        if (librosPorIdioma.isEmpty()) {
+//            System.out.println("No se econtraron libros en el idioma seleccionado");
+//            return;
+//        }
+//        System.out.println("********Libros por idioma********");
+//        librosPorIdioma.forEach(System.out::println);
+
+    }
 }
